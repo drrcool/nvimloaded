@@ -23,7 +23,7 @@ opt.updatetime = 250 --Decrease update time
 opt.signcolumn = "yes" -- Always show sign column
 opt.clipboard = "unnamedplus" -- Access system clipboard
 opt.timeoutlen = 300 --	Time in milliseconds to wait for a mapped sequence to complete.
-opt.showmode = false -- Do not need to show the mode. We use the statusline instead.
+opt.showmode = true -- Do not need to show the mode. We use the statusline instead.
 opt.scrolloff = 8 -- Lines of context
 -- opt.scrolloff = 999 -- Lines of context
 -- opt.sidescrolloff = 999
@@ -57,7 +57,7 @@ opt.shortmess:append "sI"
 -- Better search
 opt.path:remove "/usr/include"
 opt.path:append "**"
--- vim.cmd [[set path=.,,,$PWD/**]] -- Set the path directly
+vim.cmd [[set path=.,,,$PWD/**]] -- Set the path directly
 
 opt.wildignorecase = true
 opt.wildignore:append "**/node_modules/*"
@@ -75,25 +75,33 @@ opt.foldlevel = 20
 opt.foldmethod = "expr"
 opt.foldexpr = "nvim_treesitter#foldexpr()"
 
--- opt.foldcolumn = "1"
--- opt.foldlevel = 99
--- opt.foldlevelstart = -1
--- opt.foldenable = true
+opt.foldcolumn = "1"
+opt.foldlevel = 99
+opt.foldlevelstart = -1
+opt.foldenable = true
 
 -- Copilot
--- cmd [[
---     imap <silent><script><expr> <C-s> copilot#Accept("\<CR>")
---     let g:copilot_no_tab_map = v:true
--- ]]
-
+vim.cmd [[
+    imap <silent><script><expr> <C-s> copilot#Accept("\<CR>")
+    let g:copilot_no_tab_map = v:true
+ ]]
 -- GUI
-opt.guifont = "Fira_Code:h14"
 
+opt.guifont = "OperatorMonoLig Nerd Font,PragmataProMonoLiga Nerd font:h22"
 if g.neovide then
-  g.neovide_transparency = 0.9
-  g.neovide_fullscreen = true
+  g.neovide_transparency = 1.0
+  g.neovide_fullscreen = false
+  g.neovide_scale_factor = 1.0
+  g.neovide_floating_blue_amount_x = 4.0
+  g.neovide_floating_blue_amount_y = 4.0
+  g.neovide_confirm_quit = true
+  g.neovide_input_macos_alt_is_meta = true
+  g.neovide_remember_window_size = true
 end
 
 -- Load filetype.lua
 g.do_filetype_lua = 1
 g.did_load_filetypes = 0
+
+vim.cmd "hi! Normal ctermbg=NONE guibg=NONE"
+vim.cmd "hi! NonText ctermbg=NONE guibg=NONE guifg=NONE ctermfg=NONE"

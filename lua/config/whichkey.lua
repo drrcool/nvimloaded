@@ -36,14 +36,16 @@ local function normal_keymap()
 
   keymap_f = {
     name = "Find",
-    f = { "<cmd>lua require('utils.finder').find_files()<cr>", "Files" },
+    f = { "<cmd>lua require('telescope.builtin').find_files()<cr>", "Files" },
     d = { "<cmd>lua require('utils.finder').find_dotfiles()<cr>", "Dotfiles" },
     b = { "<cmd>lua require('telescope.builtin').buffers()<cr>", "Buffers" },
     h = { "<cmd>lua require('telescope.builtin').help_tags()<cr>", "Help" },
     m = { "<cmd>lua require('telescope.builtin').marks()<cr>", "Marks" },
     o = { "<cmd>lua require('telescope.builtin').oldfiles()<cr>", "Old Files" },
+    k = { "<cmd>lua require('telescope.builtin').keymaps()<CR>", "Key Maps" },
     g = { "<cmd>lua require('telescope.builtin').live_grep()<cr>", "Live Grep" },
     c = { "<cmd>lua require('telescope.builtin').commands()<cr>", "Commands" },
+    t = { "<cmd>lua require('telescope.builtin').colorscheme({enable_preview=true})<CR>", "Color Theme" },
     r = { "<cmd>lua require'telescope'.extensions.file_browser.file_browser()<cr>", "File Browser" },
     w = { "<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<cr>", "Current Buffer" },
     e = { "<cmd>NvimTreeToggle<cr>", "Explorer" },
@@ -58,8 +60,7 @@ local function normal_keymap()
 
   local keymap = {
     ["w"] = { "<cmd>update!<CR>", "Save" },
-    ["q"] = { "<cmd>lua require('utils').quit()<CR>", "Quit" },
-    -- ["t"] = { "<cmd>ToggleTerm<CR>", "Terminal" },
+    ["t"] = { "<cmd>ToggleTerm<CR>", "Terminal" },
 
     a = {
       name = "Attempt",
@@ -74,7 +75,7 @@ local function normal_keymap()
     b = {
       name = "Buffer",
       c = { "<Cmd>BDelete this<Cr>", "Close Buffer" },
-      f = { "<Cmd>bdelete!<Cr>", "Force Close Buffer" },
+      f = { "<Cmd>BDelete! this<Cr>", "Force Close Buffer" },
       D = { "<Cmd>BWipeout other<Cr>", "Delete All Buffers" },
       b = { "<Cmd>BufferLinePick<Cr>", "Pick a Buffer" },
       p = { "<Cmd>BufferLinePickClose<Cr>", "Pick & Close a Buffer" },
@@ -103,18 +104,11 @@ local function normal_keymap()
       -- f = "Select Outer Function",
       -- F = "Select Outer Class",
     },
-
     d = {
-      name = "Debug",
+      name = "Diagnostics",
     },
-
-    -- Database
     D = {
-      name = "Database",
-      u = { "<Cmd>DBUIToggle<Cr>", "Toggle UI" },
-      f = { "<Cmd>DBUIFindBuffer<Cr>", "Find buffer" },
-      r = { "<Cmd>DBUIRenameBuffer<Cr>", "Rename buffer" },
-      q = { "<Cmd>DBUILastQueryInfo<Cr>", "Last query info" },
+      name = "Debug",
     },
 
     f = keymap_f,
@@ -169,7 +163,7 @@ local function normal_keymap()
       t = { "<cmd>OverseerToggle!<cr>", "OverseerToggle" },
     },
 
-    t = {
+    T = {
       name = "Test",
       a = { "<cmd>lua require('neotest').run.attach()<cr>", "Attach" },
       f = { "<cmd>lua require('neotest').run.run(vim.fn.expand('%'))<cr>", "Run File" },
@@ -208,36 +202,12 @@ local function normal_keymap()
     },
 
     s = {
-      name = "Search",
-      o = { [[ <Esc><Cmd>lua require('spectre').open()<CR>]], "Open" },
-      c = { [[ <Esc><Cmd>lua require('utils.cht').cht_input()<CR>]], "cht.sh" },
-      s = { [[ <Esc><Cmd>lua require('utils.term').so()<CR>]], "Stack Overflow" },
-      w = { [[ <Esc><Cmd>lua require("telescope").extensions.arecibo.websearch()<CR>]], "Web" },
-    },
-
-    v = {
-      name = "Vimspector",
-      G = { "<cmd>lua require('config.vimspector').generate_debug_profile()<cr>", "Generate Debug Profile" },
-      I = { "<cmd>VimspectorInstall<cr>", "Install" },
-      U = { "<cmd>VimspectorUpdate<cr>", "Update" },
-      R = { "<cmd>call vimspector#RunToCursor()<cr>", "Run to Cursor" },
-      c = { "<cmd>call vimspector#Continue()<cr>", "Continue" },
-      i = { "<cmd>call vimspector#StepInto()<cr>", "Step Into" },
-      o = { "<cmd>call vimspector#StepOver()<cr>", "Step Over" },
-      s = { "<cmd>call vimspector#Launch()<cr>", "Start" },
-      t = { "<cmd>call vimspector#ToggleBreakpoint()<cr>", "Toggle Breakpoint" },
-      u = { "<cmd>call vimspector#StepOut()<cr>", "Step Out" },
-      S = { "<cmd>call vimspector#Stop()<cr>", "Stop" },
-      r = { "<cmd>call vimspector#Restart()<cr>", "Restart" },
-      x = { "<cmd>VimspectorReset<cr>", "Reset" },
-      H = { "<cmd>lua require('config.vimspector').toggle_human_mode()<cr>", "Toggle HUMAN mode" },
+      name = "Splits",
     },
 
     x = {
       name = "External",
       d = { "<cmd>lua require('utils.term').docker_client_toggle()<CR>", "Docker" },
-      t = { "<cmd>lua require('utils.term').docker_ctop_toggle()<CR>", "Docker - ctop" },
-      y = { "<cmd>lua require('utils.term').docker_dockly_toggle()<CR>", "Docker - dockly" },
       p = { "<cmd>lua require('utils.term').project_info_toggle()<CR>", "Project Info" },
       s = { "<cmd>lua require('utils.term').system_info_toggle()<CR>", "System Info" },
       c = { "<cmd>lua require('utils.term').cht()<CR>", "Cheatsheet" },
@@ -281,55 +251,9 @@ local function normal_keymap()
       h = { name = "Hunk" },
       t = { name = "Toggle" },
       x = { "<cmd>lua require('telescope.builtin').git_branches()<cr>", "Switch Branch" },
-      -- g = {
-      --   name = "+Github",
-      --   c = {
-      --     name = "+Commits",
-      --     c = { "<cmd>GHCloseCommit<cr>", "Close" },
-      --     e = { "<cmd>GHExpandCommit<cr>", "Expand" },
-      --     o = { "<cmd>GHOpenToCommit<cr>", "Open To" },
-      --     p = { "<cmd>GHPopOutCommit<cr>", "Pop Out" },
-      --     z = { "<cmd>GHCollapseCommit<cr>", "Collapse" },
-      --   },
-      --   i = {
-      --     name = "+Issues",
-      --     p = { "<cmd>GHPreviewIssue<cr>", "Preview" },
-      --   },
-      --   l = {
-      --     name = "+Litee",
-      --     t = { "<cmd>LTPanel<cr>", "Toggle Panel" },
-      --   },
-      --   r = {
-      --     name = "+Review",
-      --     b = { "<cmd>GHStartReview<cr>", "Begin" },
-      --     c = { "<cmd>GHCloseReview<cr>", "Close" },
-      --     d = { "<cmd>GHDeleteReview<cr>", "Delete" },
-      --     e = { "<cmd>GHExpandReview<cr>", "Expand" },
-      --     s = { "<cmd>GHSubmitReview<cr>", "Submit" },
-      --     z = { "<cmd>GHCollapseReview<cr>", "Collapse" },
-      --   },
-      --   p = {
-      --     name = "+Pull Request",
-      --     c = { "<cmd>GHClosePR<cr>", "Close" },
-      --     d = { "<cmd>GHPRDetails<cr>", "Details" },
-      --     e = { "<cmd>GHExpandPR<cr>", "Expand" },
-      --     o = { "<cmd>GHOpenPR<cr>", "Open" },
-      --     p = { "<cmd>GHPopOutPR<cr>", "PopOut" },
-      --     r = { "<cmd>GHRefreshPR<cr>", "Refresh" },
-      --     t = { "<cmd>GHOpenToPR<cr>", "Open To" },
-      --     z = { "<cmd>GHCollapsePR<cr>", "Collapse" },
-      --   },
-      --   t = {
-      --     name = "+Threads",
-      --     c = { "<cmd>GHCreateThread<cr>", "Create" },
-      --     n = { "<cmd>GHNextThread<cr>", "Next" },
-      --     t = { "<cmd>GHToggleThread<cr>", "Toggle" },
-      --   },
-      -- },
     },
   }
   whichkey.register(keymap, opts)
-  -- legendary.bind_whichkey(keymap, opts, false)
 end
 
 local function visual_keymap()
@@ -357,7 +281,6 @@ local function visual_keymap()
   }
 
   whichkey.register(keymap, v_opts)
-  -- legendary.bind_whichkey(keymap, v_opts, false)
 end
 
 local function code_keymap()

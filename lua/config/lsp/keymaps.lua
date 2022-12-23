@@ -15,10 +15,11 @@ local function keymappings(client, bufnr)
   -- vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = 0 })
   keymap("n", "K", vim.lsp.buf.hover, { buffer = bufnr })
 
-  keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opts)
-  keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>", opts)
+  keymap("n", "[d", "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts)
+  keymap("n", "]d", "<cmd>Lspsaga diagnostic_jump_next<CR>", opts)
   keymap("n", "[e", "<cmd>lua vim.diagnostic.goto_prev({severity = vim.diagnostic.severity.ERROR})<CR>", opts)
   keymap("n", "]e", "<cmd>lua vim.diagnostic.goto_next({severity = vim.diagnostic.severity.ERROR})<CR>", opts)
+  keymap("n", "<leader>cd", "<cmd>Lspsaga show_line_diagnostics<CR>", opts)
 
   -- Whichkey
   local keymap_l = {
@@ -27,7 +28,7 @@ local function keymappings(client, bufnr)
       R = { "<cmd>Trouble lsp_references<cr>", "Trouble References" },
       a = { "<cmd>lua vim.lsp.buf.code_action()<CR>", "Code Action" },
       d = { "<cmd>lua require('telescope.builtin').diagnostics()<CR>", "Diagnostics" },
-      f = { "<cmd>Lspsaga lsp_finder<CR>", "Finder" },
+      F = { "<cmd>Lspsaga lsp_finder<CR>", "Finder" },
       i = { "<cmd>LspInfo<CR>", "Lsp Info" },
       n = { "<cmd>lua require('renamer').rename()<CR>", "Rename" },
       r = { "<cmd>lua require('telescope.builtin').lsp_references()<CR>", "References" },
@@ -35,23 +36,33 @@ local function keymappings(client, bufnr)
       t = { "<cmd>TroubleToggle document_diagnostics<CR>", "Trouble" },
       L = { "<cmd>lua vim.lsp.codelens.refresh()<CR>", "Refresh CodeLens" },
       l = { "<cmd>lua vim.lsp.codelens.run()<CR>", "Run CodeLens" },
-      D = { "<cmd>lua require('config.lsp').toggle_diagnostics()<CR>", "Toggle Inline Diagnostics" },
+      D = { "<Cmd>lua vim.lsp.buf.definition()<CR>", "Definition" },
+      A = { "<cmd>Lspsaga code_action<CR>", "Saga Code Action" },
+      h = { "<cmd>lua vim.lsp.buf.signature_help()<CR>", "Signature Help" },
+      I = { "<cmd>Telescope lsp_implementations<CR>", "Goto Implementation" },
+      b = { "<cmd>lua vim.lsp.buf.type_definition()<CR>", "Goto Type Definition" },
+      j = { "<Cmd>lua vim.lsp.buf.declaration()<CR>", "Declaration" },
+    },
+  }
+
+  local keymap_d = {
+    d = {
+      name = "Diagnostics",
+      x = { "<cmd>TroubleToggle<CR>", "Toggle Trouble" },
+      w = { "<cmd>TroubleToggle workspace_diagnostics<cr>", "Workspace Diagnostics" },
+      d = { "<cmd>TroubleToggle document_diagnostics<cr>", "Document Diagnostics" },
+      q = { "<cmd>TroubleToggle quickfix<cr>", "Quickfix" },
+      l = { "<cmd>TroubleToggle loclist<cr>", "Location List" },
+      R = { "<cmd>TroubleToggle lsp_references<cr>", "LSP References" },
+      j = { "<cmd>Lspsaga diagnostic_jump_prev<CR>", "Prev Diagnostic" },
+      k = { "<cmd>Lspsaga diagnostic_jump_next<CR>", "Next Diagnostic" },
     },
   }
   if client.server_capabilities.documentFormattingProvider then
-    keymap_l.l.F = { "<cmd>lua vim.lsp.buf.format({async = true})<CR>", "Format Document" }
+    keymap_l.l.f = { "<cmd>lua vim.lsp.buf.format({async = true})<CR>", "Format Document" }
+    keymap_l.l.p = { "<cmd>:Prettier<CR>", "Run Prettier" }
+    keymap_l.l.e = { "<cmd>:ESlintFixAll<CR>", "Run ESLint Fix" }
   end
-
-  local keymap_g = {
-    name = "Goto",
-    d = { "<Cmd>lua vim.lsp.buf.definition()<CR>", "Definition" },
-    -- d = { "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", "Definition" },
-    D = { "<Cmd>lua vim.lsp.buf.declaration()<CR>", "Declaration" },
-    h = { "<cmd>lua vim.lsp.buf.signature_help()<CR>", "Signature Help" },
-    I = { "<cmd>Telescope lsp_implementations<CR>", "Goto Implementation" },
-    b = { "<cmd>lua vim.lsp.buf.type_definition()<CR>", "Goto Type Definition" },
-    -- b = { "<cmd>lua require('goto-preview').goto_preview_type_definition()<CR>", "Goto Type Definition" },
-  }
 
   local keymap_v_l = {
     l = {
@@ -62,7 +73,7 @@ local function keymappings(client, bufnr)
 
   local o = { buffer = bufnr, prefix = "<leader>" }
   whichkey.register(keymap_l, o)
-  -- legendary.bind_whichkey(keymap_l, o, false)
+  whichkey.register(keymap_d, o)
 
   o = { mode = "v", buffer = bufnr, prefix = "<leader>" }
   whichkey.register(keymap_v_l, o)

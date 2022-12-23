@@ -9,7 +9,7 @@ local whichkey = require "which-key"
 
 function M.setup()
   local keymap = {
-    d = {
+    D = {
       name = "DAP",
       R = { "<cmd>lua require'dap'.run_to_cursor()<cr>", "Run to Cursor" },
       E = { "<cmd>lua require'dapui'.eval(vim.fn.input '[Expression] > ')<cr>", "Evaluate Input" },
@@ -45,7 +45,7 @@ function M.setup()
   -- legendary.bind_whichkey(keymap, opts, false)
 
   local keymap_v = {
-    d = {
+    D = {
       name = "Debug",
       e = { "<cmd>lua require'dapui'.eval()<cr>", "Evaluate" },
     },
