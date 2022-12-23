@@ -73,6 +73,7 @@ local servers = {
           -- library = vim.api.nvim_get_runtime_file("", true),
           maxPreload = 2000,
           preloadFileSize = 50000,
+          checkThirdParty = false,
         },
         completion = { callSnippet = "Replace" },
         telemetry = { enable = false },
@@ -87,24 +88,24 @@ local servers = {
     settings = {
       javascript = {
         inlayHints = {
-          includeInlayEnumMemberValueHints = true,
-          includeInlayFunctionLikeReturnTypeHints = true,
-          includeInlayFunctionParameterTypeHints = true,
-          includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
-          includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-          includeInlayPropertyDeclarationTypeHints = true,
-          includeInlayVariableTypeHints = true,
+          includeInlayEnumMemberValueHints = false,
+          includeInlayFunctionLikeReturnTypeHints = false,
+          includeInlayFunctionParameterTypeHints = false,
+          includeInlayParameterNameHints = "none", -- 'none' | 'literals' | 'all';
+          includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+          includeInlayPropertyDeclarationTypeHints = false,
+          includeInlayVariableTypeHints = false,
         },
       },
       typescript = {
         inlayHints = {
-          includeInlayEnumMemberValueHints = true,
-          includeInlayFunctionLikeReturnTypeHints = true,
-          includeInlayFunctionParameterTypeHints = true,
-          includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
-          includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-          includeInlayPropertyDeclarationTypeHints = true,
-          includeInlayVariableTypeHints = true,
+          includeInlayEnumMemberValueHints = false,
+          includeInlayFunctionLikeReturnTypeHints = false,
+          includeInlayFunctionParameterTypeHints = false,
+          includeInlayParameterNameHints = "none", -- 'none' | 'literals' | 'all';
+          includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+          includeInlayPropertyDeclarationTypeHints = false,
+          includeInlayVariableTypeHints = false,
         },
       },
     },

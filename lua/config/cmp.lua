@@ -51,17 +51,22 @@ function M.setup()
     local line, col = unpack(vim.api.nvim_win_get_cursor(0))
     return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match "%s" == nil
   end
-
+  local check_backspace = function()
+    local col = vim.fn.col "." - 1
+    return col == 0 or vim.fn.getline("."):sub(col, col):match "%s"
+  end
   local luasnip = require "luasnip"
-  local neogen = require "neogen"
+  -- local neogen = require "neogen"
   local cmp = require "cmp"
 
+  require("luasnip.loaders.from_vscode").lazy_load()
+  require("luasnip.loaders.from_snipmate").lazy_load()
   cmp.setup {
     completion = { completeopt = "menu,menuone,noinsert", keyword_length = 1 },
-    -- experimental = { native_menu = false, ghost_text = false },
-    -- view = {
-    --   entries = "native",
-    -- },
+    experimental = { ghost_text = true },
+    view = {
+      entries = "native",
+    },
     sorting = {
       priority_weight = 2,
       comparators = {
@@ -162,8 +167,8 @@ function M.setup()
           cmp.select_next_item()
         elseif luasnip.expand_or_jumpable() then
           luasnip.expand_or_jump()
-        elseif neogen.jumpable() then
-          neogen.jump_next()
+          -- elseif neogen.jumpable() then
+          --   neogen.jump_next()
         elseif has_words_before() then
           cmp.complete()
         else
@@ -174,30 +179,37 @@ function M.setup()
         "s",
         "c",
       }),
-      -- ["<Tab>"] = cmp.mapping(function(fallback)
-      --   if cmp.visible() then
-      --     cmp.select_next_item()
-      --   elseif luasnip.expand_or_jumpable() then
-      --     luasnip.expand_or_jump()
-      --   elseif neogen.jumpable() then
-      --     neogen.jump_next()
-      --   elseif has_words_before() then
-      --     cmp.complete()
-      --   else
-      --     fallback()
-      --   end
-      -- end, {
-      --   "i",
-      --   "s",
-      --   "c",
-      -- }),
+      ["<Tab>"] = cmp.mapping(function(fallback)
+        if luasnip.jumpable() then
+          luasnip.jump(1)
+        elseif cmp.visible() then
+          cmp.select_next_item()
+        elseif check_backspace() then
+          fallback()
+        else
+          fallback()
+        end
+      end, {
+        "i",
+        "s",
+      }),
+      ["<S-Tab>"] = cmp.mapping(function(fallback)
+        if luasnip.jumpable(-1) then
+          luasnip.jump(-1)
+        elseif cmp.visible() then
+          cmp.select_prev_item()
+        else
+          fallback()
+        end
+      end, {
+        "i",
+        "s",
+      }),
       ["<C-k>"] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_prev_item()
         elseif luasnip.jumpable(-1) then
           luasnip.jump(-1)
-        elseif neogen.jumpable(true) then
-          neogen.jump_prev()
         else
           fallback()
         end
@@ -232,16 +244,16 @@ function M.setup()
       },
     },
     sources = {
+      { name = "copilot" },
       { name = "nvim_lsp", max_item_count = 15 },
       { name = "nvim_lsp_signature_help", max_item_count = 5 },
+      { name = "nvim_lua" },
       { name = "luasnip", max_item_count = 5 },
       -- { name = "cmp_tabnine" },
       { name = "treesitter", max_item_count = 5 },
       { name = "rg", max_item_count = 2 },
       { name = "buffer", max_item_count = 5 },
-      { name = "nvim_lua" },
       { name = "path" },
-      { name = "crates" },
       -- { name = "spell" },
       -- { name = "emoji" },
       -- { name = "calc" },
@@ -253,22 +265,6 @@ function M.setup()
       },
     },
   }
-
-  -- Use buffer source for `/`
-  cmp.setup.cmdline("/", {
-    sources = {
-      { name = "buffer" },
-    },
-  })
-
-  -- Use cmdline & path source for ':'
-  cmp.setup.cmdline(":", {
-    sources = cmp.config.sources({
-      { name = "path" },
-    }, {
-      { name = "cmdline" },
-    }),
-  })
 
   -- Auto pairs
   local cmp_autopairs = require "nvim-autopairs.completion.cmp"
