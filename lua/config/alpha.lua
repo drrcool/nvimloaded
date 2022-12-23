@@ -32,7 +32,11 @@ function M.setup()
   dashboard.section.header.val = header()
 
   dashboard.section.buttons.val = {
+    dashboard.button("f", " Find File", ":Telescope find_files <CR>"),
     dashboard.button("e", "  New file", ":ene <BAR> startinsert <CR>"),
+    dashboard.button("p", " Find Project", ":Telescope projects <CR>"),
+    dashboard.button("r", "  Recently used files", ":Telescope oldfiles <CR>"),
+    dashboard.button("t", "  Find text", ":Telescope live_grep <CR>"),
     dashboard.button("c", "  Configuration", ":e $MYVIMRC <CR>"),
     dashboard.button("q", "  Quit Neovim", ":qa<CR>"),
   }
@@ -41,8 +45,7 @@ function M.setup()
     -- Number of plugins
     local total_plugins = #vim.tbl_keys(packer_plugins)
     local datetime = os.date "%d-%m-%Y %H:%M:%S"
-    local plugins_text = 
-      "   "
+    local plugins_text = "   "
       .. total_plugins
       .. " plugins"
       .. "   v"
