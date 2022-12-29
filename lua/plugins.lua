@@ -2,7 +2,7 @@ local M = {}
 
 function M.setup()
   -- Indicate first time installation
-  local packer_bootstrap = true
+  local packer_bootstrap = false
 
   -- packer.nvim configuration
   local conf = {
